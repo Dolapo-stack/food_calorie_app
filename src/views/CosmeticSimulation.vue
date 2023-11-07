@@ -7,6 +7,9 @@ const ingredientsState = reactive({
   selected: "",
   score: 0,
   calculating: false,
+  noRiskValue: 0,
+  lowRiskValue: 0,
+  highRiskValue: 0,
 });
 
 const like_button = () => {
@@ -14,7 +17,18 @@ const like_button = () => {
 };
 
 const classifyIngredients = (ingredients) => {
+  ingredientsState.noRiskValue = 0;
+  ingredientsState.lowRiskValue = 0;
+  ingredientsState.highRiskValue = 0;
+
   for (const ingredient of ingredients) {
+    if (ingredient.hazardLevel <= 2) {
+      ingredientsState.noRiskValue += 1;
+    } else if (ingredient.hazardLevel > 2 && ingredient.hazardLevel < 3) {
+      ingredientsState.lowRiskValue += 1;
+    } else if (ingredient.hazardLevel >= 3) {
+      ingredientsState.highRiskValue += 1;
+    }
   }
 };
 
@@ -44,6 +58,7 @@ const calculateCosmeticScore = async () => {
       });
       const data = await response.json();
       ingredientsState.score = data.Data.SCORE;
+      classifyIngredients(data.Data.INGREDIENTS);
     } catch (err) {}
     ingredientsState.calculating = false;
   } else {
@@ -164,7 +179,7 @@ const reset_form = () => {
               <div class="at"></div>
               <span>High risk</span>
             </div>
-            <div class="value">0</div>
+            <div class="value">{{ ingredientsState.highRiskValue }}</div>
           </div>
 
           <div class="low-risk">
@@ -172,7 +187,7 @@ const reset_form = () => {
               <div class="low"></div>
               <span>Low risk</span>
             </div>
-            <div class="value">0</div>
+            <div class="value">{{ ingredientsState.lowRiskValue }}</div>
           </div>
 
           <div class="without-risk">
@@ -180,7 +195,7 @@ const reset_form = () => {
               <div class="with"></div>
               <span>No risk</span>
             </div>
-            <div class="value">0</div>
+            <div class="value">{{ ingredientsState.noRiskValue }}</div>
           </div>
         </div>
       </div>
