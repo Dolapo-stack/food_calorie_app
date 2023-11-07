@@ -1,0 +1,26 @@
+@baseUrl = https://food-cosmetic-qa.k-lab.workers.dev
+@ContentType=content-type: application/json 
+
+# @name getCosmetic[GET]
+GET {{baseUrl}}/cosmetic
+{{ContentType}}
+
+###
+# @name getCosmetic[POST]
+POST {{baseUrl}}/cosmetic
+{{ContentType}}
+
+{
+    "category": "FACE_MASKS",
+    "ingredients": ["Water","Glycerin","Ascorbic acid"]
+}
+
+###
+# @name getFood[POST]
+POST {{baseUrl}}/food
+{{ContentType}}
+
+{
+    "category": "Drink",
+    "ingredients": ["milk"]
+}
